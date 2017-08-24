@@ -28,20 +28,23 @@ class WelcomeController < ApplicationController
         @error = results['response']['error']['description']
       end	   
     end
-  end
- 
-  def test
-  response = HTTParty.get("http://api.wunderground.com/api/#{ENV['wunderground_api_key']}/geolookup/conditions/q/AZ/Phoenix.json")
 
-  
-  @results = {}
-    @results[:location] = response['location']['city']
-    @results[:temp_f] = response['current_observation']['temp_f']
-    @results[:temp_c] = response['current_observation']['temp_c']
-    @results[:weather_icon] = response['current_observation']['icon_url']
-    @results[:weather_words] = response['current_observation']['weather'] 
-    @results[:forecast_link] = response['current_observation']['forecast_url']
-    @results[:real_feel] = response['current_observation']['feelslike_f']
+    #set background image depending on key words in weather description
+    @bg_img = ''
+    case @weather_words
+    when /Drizzle/, /Rain/, /Spray/, /Hail/
+      @bg_img = "gabriele-diwald-201135.jpg"
+    when /Snow/, /Ice/
+      @bg_img = "alexey-kuzmin-175371.jpg"
+    when /Thunder/
+      @bg_img = "jeremy-bishop-72584"
+    when /Mist/, /Fog/, /Overcast/, /Cloud/
+      @bg_img = "antoine-barres-198888.jpg"
+    when "Clear"
+      @bg_img = "larm-rmah-217759.jpg"
+    end
+      
+
   end
 
   def set_states
